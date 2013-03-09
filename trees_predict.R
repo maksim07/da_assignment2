@@ -42,7 +42,7 @@ for (i in 1:nrow(trainData))
                " ", trainResiduals[i, "prediction"] == trainResiduals[i, "actual"]))
 }
 
-# calculate errors during cross validation
+# calculating errors during cross validation
 trainErrors <- trainResiduals[trainResiduals$prediction != trainResiduals$actual, ]
 trainErrorsTable <- table(trainErrors)
 trainErrorsTable
