@@ -6,25 +6,7 @@ library(BMA)
 # load data
 load("/tmp/samsungData.rda")
 
-# selects only specified subjects and removes "action" column
-getSubjects <- function(data, subs)
-{
-  data[data$subject %in% subs, c(-562)]
-}
-
-# funcion for renaming invalid columns 
-cleanDataStructure <- function(raw)
-{
-  colnames(raw) <- gsub("\\(\\)", "_", colnames(raw))
-  colnames(raw) <- gsub("\\(", "_", colnames(raw))
-  colnames(raw) <- gsub("\\)", "_", colnames(raw))
-  colnames(raw) <- gsub("\\,", "_", colnames(raw))
-  colnames(raw) <- gsub("\\.", "_", colnames(raw))
-  colnames(raw) <- gsub("-", "_", colnames(raw))
-  raw$activity <- as.factor(raw$activity)  
-
-  raw
-}
+source("utils.R")
 
 # training with leave one out cross validation
 trainData <- cleanDataStructure(getSubjects(samsungData, c(1, 3, 5, 6)))  
@@ -48,16 +30,13 @@ trainErrorsTable <- table(trainErrors)
 trainErrorsTable
 trainErrorsTable / sum(trainErrorsTable) >= 0.1
 
-trainData$predicted <- as.integer(trainResiduals$prediction == trainResiduals$actual)
-
 
 # testing
 testData <- cleanDataStructure(getSubjects(samsungData, c(27, 28, 29, 30)))
-
 t <- tree(activity ~ ., data=trainData)
+plot(t)
 pr <- predict(t, testData, type="class")
 pr <- data.frame(pr = pr, ac = testData$activity)
 
-sum(pr$pr != pr$ac) / nrow(pr)
-
+print(paste0("Error rate is ", sum(pr$pr != pr$ac) / nrow(pr)))
 
