@@ -10,6 +10,8 @@ source("utils.R")
 
 # training with leave one out cross validation
 trainData <- cleanDataStructure(getSubjects(samsungData, c(1, 3, 5, 6)))  
+testData <- cleanDataStructure(getSubjects(samsungData, c(27, 28, 29, 30)))
+
 trainResiduals <- data.frame(prediction = c(), actual = c())
 for (i in 1:nrow(trainData))
 {
@@ -28,15 +30,17 @@ for (i in 1:nrow(trainData))
 trainErrors <- trainResiduals[trainResiduals$prediction != trainResiduals$actual, ]
 trainErrorsTable <- table(trainErrors)
 trainErrorsTable
-trainErrorsTable / sum(trainErrorsTable) >= 0.1
+trainErrorsTable / sum(trainErrorsTable) >= 0
 
 
 # testing
-testData <- cleanDataStructure(getSubjects(samsungData, c(27, 28, 29, 30)))
 t <- tree(activity ~ ., data=trainData)
 plot(t)
+text(t)
 pr <- predict(t, testData, type="class")
 pr <- data.frame(pr = pr, ac = testData$activity)
 
 print(paste0("Error rate is ", sum(pr$pr != pr$ac) / nrow(pr)))
+
+
 

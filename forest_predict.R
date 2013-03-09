@@ -8,6 +8,8 @@ load("/tmp/samsungData.rda")
 # training and testing data
 trainData <- cleanDataStructure(getSubjects(samsungData, c(1, 3, 5, 6)))  
 testData <- cleanDataStructure(getSubjects(samsungData, c(27, 28, 29, 30)))
+validationData <- cleanDataStructure(getSubjects(samsungData, c(2, 7, 8, 9:26)))
+
 
 
 # preparing random forest
@@ -39,13 +41,17 @@ sum(predictTrain != trainData$activity) / length(trainData$activity)
 
 
 # predicting test data
-predictTrain <- predict(forestTrain, testData)
-sum(predictTrain != testData$activity) / length(testData$activity)
-sum(predictTrain != testData$activity)
+predictTest <- predict(forestTrain, testData)
+sum(predictTest != testData$activity) / length(testData$activity)
+sum(predictTest != testData$activity)
 
 testData$predicted <- predictTrain
 
 table(testData$activity, testData$predicted)
 
 
+# validating data
+predictValid <- predict(forestTrain, validationData)
+sum(predictValid != validationData$activity) / length(validationData$activity)
+sum(predictValid != validationData$activity)
 
