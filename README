@@ -1,0 +1,4 @@
+Assignment 2 of Data Anaysis cource of Johns Hopkins University at coursera.org
+
+load_data.R - script for loading data
+trees_predict.R - script with prediction implementation by using trees
