@@ -19,7 +19,7 @@ forestTrain
 
 # cross validation
 predictErrorRates <- c()
-for (i in c(1:20))
+for (i in c(1:50))
 {
   set.seed(1000 + i)
   samp <- sample(c(1:nrow(trainData)), size=200)
@@ -33,7 +33,7 @@ for (i in c(1:20))
 
 mean(predictErrorRates)
 
-hist(predictErrorRates, 7, col="lightgray")
+hist(predictErrorRates, 7, col="lightgray", main="Cros validation error rates", xlab="Error rate")
 
 # error rate on train data
 predictTrain<-predict(forestTrain, newdata=trainData)
@@ -45,9 +45,10 @@ predictTest <- predict(forestTrain, testData)
 sum(predictTest != testData$activity) / length(testData$activity)
 sum(predictTest != testData$activity)
 
-testData$predicted <- predictTrain
+testData$predicted <- predictTest
 
-table(testData$activity, testData$predicted)
+testDataErrors <- testData$activity != testData$predicted
+table(testData[testDataErrors,]$activity, testData[testDataErrors,]$predicted)
 
 
 # validating data

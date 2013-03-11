@@ -30,13 +30,14 @@ for (i in 1:nrow(trainData))
 trainErrors <- trainResiduals[trainResiduals$prediction != trainResiduals$actual, ]
 trainErrorsTable <- table(trainErrors)
 trainErrorsTable
-trainErrorsTable / sum(trainErrorsTable) >= 0
+
+sum(trainResiduals$prediction != trainResiduals$actual) / length(trainResiduals$actual)
 
 
 # testing
 t <- tree(activity ~ ., data=trainData)
 plot(t)
-text(t)
+text(t, ps = 0.4, cex=0.7)
 pr <- predict(t, testData, type="class")
 pr <- data.frame(pr = pr, ac = testData$activity)
 
