@@ -29,7 +29,6 @@ for (i in 1:nrow(trainData))
 # calculating errors during cross validation
 trainErrors <- trainResiduals[trainResiduals$prediction != trainResiduals$actual, ]
 trainErrorsTable <- table(trainErrors)
-trainErrorsTable
 
 sum(trainResiduals$prediction != trainResiduals$actual) / length(trainResiduals$actual)
 
@@ -41,7 +40,8 @@ text(t, ps = 0.4, cex=0.7)
 pr <- predict(t, testData, type="class")
 pr <- data.frame(pr = pr, ac = testData$activity)
 
+sum(pr$pr != pr$ac)
 print(paste0("Error rate is ", sum(pr$pr != pr$ac) / nrow(pr)))
 
-
+table(pr[pr$pr != pr$ac,]$pr, pr[pr$pr != pr$ac,]$ac)
 
